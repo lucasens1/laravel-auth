@@ -9,28 +9,32 @@
             </div>
         @endif
         <a href="{{ route('admin.projects.create') }}" class="btn btn-primary"> + Progetto</a>
-        <table class="table table-striped">
+        <table class="table">
             <thead>
                 <tr>
                     <th scope="col">ID</th>
                     <th scope="col">Titolo</th>
                     <th scope="col">Descrizione</th>
-                    <th scope="col">Slug(URL)</th>
                     <th scope="col">Azioni</th>
                 </tr>
             </thead>
             <tbody class="fw-lighter">
                 @foreach ($projectsList as $project)
                     <tr>
-                        <td> {{ $project->id }}</td>
+                        <th scope="row"> {{ $project->id }}</td>
                         <td> {{ $project->title }} </td>
                         <td> {{ $project->description }} </td>
-                        <td> {{ $project->slug }} </td>
                         <td class="d-flex gap-2">
                             <a href="{{ route('admin.projects.show', ['project' => $project->id]) }}"
-                                class="btn btn-warning fs-6"> Mostra Dettagli </a>
-                            <a href="{{ route('admin.projects.destroy', ['project' => $project->id]) }}"
-                                class="btn btn-danger fs-6"> Elimina Progetto </a>
+                                class="btn btn-warning fs-6">Dettagli </a>
+                            <a href="{{ route('admin.projects.edit', ['project' => $project->id]) }}"
+                                class="btn btn-warning fs-6">Modifica </a>
+                            <form action="{{ route('admin.projects.destroy', ['project' => $project->id]) }}"
+                                method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger">Elimina</button>
+                            </form>
                         </td>
                     </tr>
                 @endforeach

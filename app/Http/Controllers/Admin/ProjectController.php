@@ -64,9 +64,15 @@ class ProjectController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Project $project)
     {
        /*  $data = $request->all(); */
+       $data = $request->all();
+       $project->title = $data['title'];
+       $project->description = $data['description'];
+       $project->slug = Str::slug($project->title);
+       $project->save();
+       return redirect()->route('admin.projects.index')->with('message', 'Progetto : '.$project->title.' aggiornato con successo'); 
     }
 
     /**
@@ -75,6 +81,6 @@ class ProjectController extends Controller
     public function destroy(Project $project)
     {
         $project->delete();
-        return redirect()->route('admin.projects.index')->with('message', 'Il post'.$project->title.' è stato cancellato');
+        return redirect()->route('admin.projects.index')->with('message', 'Il post : '.$project->title.' è stato cancellato');
     }
 }
