@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Project;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class ProjectController extends Controller
 {
@@ -23,7 +24,8 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        //
+        // Restituisco la view per aggiungere dati
+        return view('admin.project.create');
     }
 
     /**
@@ -31,23 +33,32 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // Salvo i dati
+        $data = $request->all();
+        $newProject = new Project();
+        $newProject->title = $data['title']; 
+        $newProject->description = $data['description'];
+        // Generiamo lo slug
+        $newProject->slug = Str::slug($newProject->title);
+        $newProject->save();
+
+        return redirect()->route('admin.projects.index');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Project $project)
     {
-        //
+        return view('admin.project.show', compact('project'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Project $project)
     {
-        //
+        return view('admin.project.edit', compact('project'));
     }
 
     /**
@@ -55,14 +66,15 @@ class ProjectController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+       /*  $data = $request->all(); */
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Project $project)
     {
-        //
+        $project->delete();
+        return redirect()->route('admin.projects.index')->with('message', 'Il post'.$project->title.' è stato cancellato');
     }
 }

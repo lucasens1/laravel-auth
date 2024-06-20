@@ -25,7 +25,7 @@ Route::middleware('auth')
     ->name('admin.') // Inizio di OGNI nome delle rotte del gruppo quindi 'dashboard' sotto diviene 'admin.dashboard' quindi tutte le rotte protette da auth inizieranno con 'admin.' 
     ->group(function() {
         Route::get('/',[DashboardController::class,'index'])->name('dashboard');
-        Route::resource('projects', ProjectController::class);
+        Route::resource('projects', ProjectController::class)->parameters(['project'=>'project:slug']);
 });
 
 require __DIR__.'/auth.php';
